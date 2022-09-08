@@ -9,7 +9,8 @@ struct ElementoDeGrupo
 	std::vector<int> valor;
 };
 
-auto getMiniterminosAndCount(const int miniTerminos, const int literalesCount)->std::pair<std::vector<int>, int>;
+//Se definen todos los constructores necesarios para los metodos 
+auto getMiniTerminosAndCount(const int miniTerminos, const int literalesCount)->std::pair<std::vector<int>, int>;
 auto mergeElementoDeGrupo(std::map<int, std::vector<ElementoDeGrupo>> gruposNumerados, int literales, std::vector<ElementoDeGrupo> &noActualizada)->std::map<int, std::vector<ElementoDeGrupo>>;
 void displayNuevaRespuesta(std::set<std::vector<int>> Respuesta);
 
@@ -28,9 +29,10 @@ int main() {
 	// Cabecera
 	cout << "\n Tecnica de Agrupacion Quine McCluskey\n";
 
-	// SetUp
+	// Interfaz
 	cout << "\n--------------------------------------------------\n";
 
+    
 	int literalesCount;
 	cout << "Digite el numero de literales(mayores a cero): ";
 	cin >> literalesCount;
@@ -82,7 +84,7 @@ int main() {
 
 		// Imprime el minitermino y su valor 
 		cout << term << ": ";
-		printMinitermino(result.first);
+		printMinitermino(respuesta.first);
 		cout << endl;
 	}
     // Ahora imprime todos los grupos 
@@ -90,8 +92,8 @@ int main() {
 	cout << "Miniterminos agrupados y los irrelevantes : \n" << endl;
 	printGrupos(gruposNumerados, IrrTermsSet);
 
-	// Merging the Groups and printing them
-	// and not updated groups are those which were not considred during merge
+	// Une los grupos y los imprime 
+	// los grupos no actualizados son los que no fueron agregados 
 	vector<ElementoDeGrupo> NoActualizada;
 	while (true) {
 		map<int, vector<ElementoDeGrupo>> newGruposNumerados = mergeElementoDeGrupo(gruposNumerados, literalesCount, noActualizada);
@@ -105,15 +107,15 @@ int main() {
 		printGrupos(gruposNumerados, IrrTermsSet);
 	}
 
-	// Imprime los terminos faltantes despues de merging 
+	// Imprime los terminos faltantes despues de agregar  
 	cout << "\n--------------------------------------------------\n";
-	cout << "Terminos olvidados en la merging " << endl;
+	cout << "Terminos olvidados al agregar:  " << endl;
 	printNoActualizada(noActualizada);
 
-	// Step to get the minterm and the table of them
+	// Paso para obtener los miniterminos y su tabla
 
-	// going through the table and taking the minterms which appear only once in the table
-	// and adding it to the answer
+	// Recorre la tabla y toma los miniterminos going through the table and taking the minterms which appear only once in the table
+	// lo agrega a la respuesta 
 	map<int, int> countEnTabla;
 	set<vector<int>> seenMiniterminos; // Used for identifying the seen minterms
 
@@ -121,11 +123,11 @@ int main() {
 		for (auto& ElementoDeGrupo : grupo.second) {
 
 			// Revisa si el minitermino se puede ver o no 
-			if (seenMiniterminos.count(ElementoDeGrupo.value)) continue;
-			seenMiniterminos.insert(ElementoDeGrupo.value);
+			if (seenMiniterminos.count(ElementoDeGrupo.valor)) continue;
+			seenMiniterminos.insert(ElementoDeGrupo.valor);
 
 			// Agrega miniterminos a la tabla 
-			for (auto& minitermino : ElementoDeGrupo.minterminos) {
+			for (auto& minitermino : ElementoDeGrupo.miniterminos) {
 				if (!IrrTermsSet.count(minitermino)) {
 					countEnTabla[minitermino]++;
 				}
@@ -133,15 +135,15 @@ int main() {
 		}
 	}
 
-	// Adding other prime implicants which were lost during merging
+	//  Paso 6: Agrega los implicantes primos que fueron olvidados en la integracion anterior 
 	for (auto& ElementoDeGrupo : noActualizada) {
-		if (seenMiniterminos.count(ElementoDeGrupo.value)) continue;
-		seenMiniterminos.insert(ElementoDeGrupo.value);
-		// printState(ElementoDeGrupo.value);
+		if (seenMiniterminos.count(ElementoDeGrupo.valor)) continue;
+		seenMiniterminos.insert(ElementoDeGrupo.valor);
+		// printEstado(ElementoDeGrupo.valor);
 		// cout << endl;
-		for (auto& mintermino : ElementoDeGrupo.minterminos) {
-			if (!IrrTermsSet.count(mintermino)) {
-				countEnTabla[mintermino]++;
+		for (auto& minitermino : ElementoDeGrupo.miniterminos) {
+			if (!IrrTermsSet.count(minitermino)) {
+				countEnTabla[minitermino]++;
 			}
 		}
 	}
@@ -157,7 +159,7 @@ int main() {
 			for (auto& gp : gruposNumerados) {
 				for (auto& ele : gp.second) {
 					int count = 0;
-					for (auto& num : ele.minterms) {
+					for (auto& num : ele.miniterminos) {
 						if (cell.first == num)count++;
 					}
 					if (count != 0) {
@@ -178,8 +180,8 @@ int main() {
 		cout << i.first << ": " << i.second << endl;
 	}
 
-	// Finding the elements left in countable which are not included
-	// The logic suggest that if the term is in the count table then it is in any of the elements
+	// Encuentra los elementos contables faltantes que no estaban incluidos
+	// La logica sugiere que si el termino es contado en la tabla entonces se encuentra en cualquiera de los elementos 
 
 	for (auto& iterator : countEnTabla) {
 		if (!terminosTomados.count(iterator.first))
@@ -214,17 +216,17 @@ int main() {
 		}
 	}
 
-	// This is for the remaining onesfor which is not included
+	// El restante de los unos que no fueron incluidos 
 	for (auto& minitermino : miniTerminosSet) {
 		if (!countEnTabla.count(miniterminos)) {
 			respuesta.insert(getMiniterminosAndCount(minitermino, literalesCount).first);
 		}
 	}
 
-	// muestra la respuesta
+	// muestra la respuesta a la ecuacion booleana reducida 
 	cout << "\n--------------------------------------------------\n";
-	cout << "La ecuacion minimizada: ";
-	displayRespuestaFormateada(respuesta);
+	cout << "La ecuacion booleana reducida: ";
+	displayRespuestaReducida(respuesta);
 
 	return 0;
 }
@@ -252,9 +254,9 @@ pair<vector<int>, int> getMiniterminosAndCount(const int minitermino, const int 
 	return miniterminoAndCount;
 }
 
-// merging function
+// Integrando la funcion 
 map<int, vector<ElementoDeGrupo>> mergeElementoDeGrupo(map<int, vector<ElementoDeGrupo>> gruposNumerados, int literales, vector<ElementoDeGrupo> &noActualizada) {
-	// Merged groups will be added here
+	// Los grupos sumados seran agregados aca
 	map<int, vector<ElementoDeGrupo>> newGruposNumerados;
 	int updateCount = 0;
 
@@ -265,8 +267,8 @@ map<int, vector<ElementoDeGrupo>> mergeElementoDeGrupo(map<int, vector<ElementoD
 		{
 			int grupoCompletoNoActualizado = 0;
 			for (auto& ElementoDeGrupo : grupo.second) {
-				// Checking if next group is present or not
-				// Comparing the elements with the next group elements
+				// Revisa si el siguiente grupo presenta implicantes primos escenciales 
+				// Compara los elementos actuales con el siguiente grupo de elementos
 				for (auto& nextElementoDeGrupo : gruposNumerados[grupo.first + 1]) {
 					int diffIndex = -1;
 					int diffCount = 0;
@@ -288,7 +290,7 @@ map<int, vector<ElementoDeGrupo>> mergeElementoDeGrupo(map<int, vector<ElementoD
 						newElementoDeGrupo.valor = ElementoDeGrupo.valor;
 						newElementoDeGrupo.valor[diffIndex] = -1;
 
-						// Adding new minters
+						// Agrega los miniterminos 
 
 						newElementoDeGrupo.miniterminos = ElementoDeGrupo.miniterminos;
 						for (auto& m : nextElementoDeGrupo.miniterminos) {
@@ -320,7 +322,7 @@ map<int, vector<ElementoDeGrupo>> mergeElementoDeGrupo(map<int, vector<ElementoD
 	return newGruposNumerados;
 }
 
-void displayRespuestaFormateada(set<vector<int>> respuesta) {
+void displayRespuestaReducida(set<vector<int>> respuesta) {
 	for (auto& i : respuesta) {
 		char letra = 'A';
 		for (auto& j : i) {
@@ -346,6 +348,7 @@ void printMiniterminos(const vector<int> v) {
 	}
 }
 
+//Imprime el Estado 
 void printEstado(const vector<int> v) {
 	for (int i = 0; i < v.size(); ++i)	{
 		if (v[i] == -1)
@@ -357,6 +360,7 @@ void printEstado(const vector<int> v) {
 	}
 }
 
+//Imprime los miniterminos irrelevantes
 void printMiniterminosConIrr(const vector<int> v, const set<int> IrrSet) {
 	for (int i = 0; i < v.size(); ++i)	{
 		if (IrrSet.count(v[i])) cout << v[i] << "* ";
@@ -364,7 +368,7 @@ void printMiniterminosConIrr(const vector<int> v, const set<int> IrrSet) {
 	}
 }
 
-// For printing the Group
+// Metodo que imprime los todos los grupos de miniterminos 
 void printGrupos(const map<int, vector<ElementoDeGrupo>> allGrupos, const set<int>IrrSet) {
 	for (auto& grupo : allGrupos) {
 		cout << "Grupo " << grupo.first << endl;
@@ -377,6 +381,7 @@ void printGrupos(const map<int, vector<ElementoDeGrupo>> allGrupos, const set<in
 	}
 }
 
+//Metodo que imprime la tabla no actualizada
 void printNoActualizada(vector<ElementoDeGrupo> noActualizada) {
 	cout << endl;
 	for (auto& ElementoDeGrupo : noActualizada) {
