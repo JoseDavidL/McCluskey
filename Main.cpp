@@ -28,7 +28,7 @@ Quine(int a)
 
 }
 
-// Paso 1: Convertir los miniterminos en booleanos 
+// 1. Convertir los miniterminos en booleanos 
 vector<string> getVariables()
 {
    vector<string> v;
@@ -39,7 +39,7 @@ vector<string> getVariables()
    return v;
 }
 
-// Paso 2: Convierte los miniterminos a binarios
+// 2. Convierte los miniterminos a binarios
 
 string deciABin(int n)
 {
@@ -60,8 +60,8 @@ string rellenar(string binario)
        binario="0"+binario;
    return binario;
 }
-
-//función para verificar si dos términos difieren en solo un bit
+ 
+//3.Verificar si dos términos difieren en solo un digito 
 bool codigoGrey(string a,string b)
 {
    int flag=0;
@@ -73,7 +73,7 @@ bool codigoGrey(string a,string b)
    return (flag==1);
 }
 
-//Función para reemplazar términos complementarios con indiferentes
+//4. Función para reemplazar términos complementarios con indiferentes
 string reemplazar_complementarios(string a,string b)
 {
    string temp="";
@@ -86,7 +86,7 @@ string reemplazar_complementarios(string a,string b)
    return temp;
 }
 
-//Función que verifica si el string b existe en el vector a
+//5. Función que verifica si el string b existe en el vector a
 bool en_vector(vector<string> a,string b)
 {
    for(int i=0;i<a.size();i++)
@@ -95,7 +95,7 @@ bool en_vector(vector<string> a,string b)
     return false;
 }
 
-//Función para reducir miniterminos 
+//6. Función para reducir miniterminos  
 vector<string> reducir(vector<string> miniterminos)
 {
 /*for (int i=0; i<miniterminos.size(); i++)
@@ -110,7 +110,7 @@ vector<string> reducir(vector<string> miniterminos)
       {
           for(int j=i;j<max;j++)
           {
-               //Si se encuentra un par de códigos grises, reemplace los bits diferentes con indiferentes.
+               //Si se encuentra un par de códigos grises, reemplace los bits que difieren con indiferentes.
                if(codigoGrey(miniterminos[i],miniterminos[j]))
                {
                   comprobado[i]=1;
@@ -215,6 +215,7 @@ int main ()
 
 
       int i;
+      // 7. Da la ecuacion booleana reducida: 
       cout << "La ecuacion booleana reducida:" << endl;
       for (i=0;i<miniterminos.size()-1; i++)
           cout <<q.getValor(miniterminos[i])<<"+";
