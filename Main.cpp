@@ -96,7 +96,7 @@ bool en_vector(vector<string> a,string b)
 }
 
 //Función para reducir miniterminos 
-vector<string> reduce(vector<string> miniterminos)
+vector<string> reducir(vector<string> miniterminos)
 {
 /*for (int i=0; i<miniterminos.size(); i++)
        cout << miniterminos[i]<<endl;
@@ -110,7 +110,7 @@ vector<string> reduce(vector<string> miniterminos)
       {
           for(int j=i;j<max;j++)
           {
-               //If a grey code pair is found, replace the differing bits with don't cares.
+               //Si se encuentra un par de códigos grises, reemplace los bits diferentes con indiferentes.
                if(codigoGrey(miniterminos[i],miniterminos[j]))
                {
                   comprobado[i]=1;
@@ -198,7 +198,7 @@ int main ()
       vector<string> miniterminos;
       istringstream f(temp);
       string s;
-      while (getLinea(f, s, ','))
+      while (getline(f, s, ','))
       {
           //cout << s << endl;
          int t=atoi(s.data());
@@ -209,9 +209,9 @@ int main ()
 
       do
       {
-         miniterminos=q.reduce(miniterminos);
+         miniterminos=q.reducir(miniterminos);
          sort(miniterminos.begin(),miniterminos.end());
-      }while(!q.VectoresIguales(miniterminos,q.reduce(miniterminos)));
+      }while(!q.VectoresIguales(miniterminos,q.reducir(miniterminos)));
 
 
       int i;
