@@ -86,7 +86,7 @@ string reemplazar_complementarios(string a,string b)
    return temp;
 }
 
-//5. Función que verifica si el string b existe en el vector a
+//6. Función que verifica si el string b existe en el vector a
 bool en_vector(vector<string> a,string b)
 {
    for(int i=0;i<a.size();i++)
@@ -95,7 +95,7 @@ bool en_vector(vector<string> a,string b)
     return false;
 }
 
-//6. Función para reducir miniterminos  
+//5. Función para reducir miniterminos  
 vector<string> reducir(vector<string> miniterminos)
 {
 /*for (int i=0; i<miniterminos.size(); i++)
