@@ -73,7 +73,7 @@ bool codigoGray(string a,string b)
    return (flag==1);
 }
 
-//4. Función para reemplazar términos complementarios con indiferentes
+//6. Función para reemplazar términos complementarios con indiferentes
 string reemplazar_complementarios(string a,string b)
 {
    string temp="";   
@@ -86,7 +86,7 @@ string reemplazar_complementarios(string a,string b)
    return temp;
 }
 
-//6. Función que verifica si el string b existe en el vector a
+//4. Función que verifica si el string b existe en el vector a
 bool en_vector(vector<string> a,string b)
 {
    for(int i=0;i<a.size();i++)
