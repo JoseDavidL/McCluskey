@@ -62,7 +62,7 @@ string rellenar(string binario)
 }
  
 //3.Verificar si dos términos difieren en solo un digito 
-bool codigoGrey(string a,string b)
+bool codigoGray(string a,string b)
 {
    int flag=0;
    for(int i=0;i<a.length();i++)
@@ -76,7 +76,7 @@ bool codigoGrey(string a,string b)
 //4. Función para reemplazar términos complementarios con indiferentes
 string reemplazar_complementarios(string a,string b)
 {
-   string temp="";
+   string temp="";   
    for(int i=0;i<a.length();i++)
    if(a[i]!=b[i])
        temp=temp+"-";
@@ -111,7 +111,7 @@ vector<string> reducir(vector<string> miniterminos)
           for(int j=i;j<max;j++)
           {
                //Si se encuentra un par de códigos grises, reemplace los bits que difieren con indiferentes.
-               if(codigoGrey(miniterminos[i],miniterminos[j]))
+               if(codigoGray(miniterminos[i],miniterminos[j]))
                {
                   comprobado[i]=1;
                   comprobado[j]=1;
